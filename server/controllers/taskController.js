@@ -51,8 +51,22 @@ exports.getMyTasks = async (req, res) => {
 
 exports.updateTask = async (req, res) => {
 	try {
-		const task = await Task.findByIdAndUpdate(req.params.id, req.body, { new: true });
+		const task = await Task.findById(req.params.id);
 		if (!task) return res.status(404).json({ success: false, message: 'Task not found' });
+
+		if (req.user.role === 'employee') {
+			if (String(task.assignedTo) !== String(req.user.userId)) {
+				return res.status(403).json({ success: false, message: 'You can only update your own tasks' });
+			}
+			if (!req.body.status) {
+				return res.status(400).json({ success: false, message: 'Employees can only update task status' });
+			}
+			task.status = req.body.status;
+		} else {
+			Object.assign(task, req.body);
+		}
+
+		await task.save();
 
 		if (req.body.status) {
 			req.io.to(`project:${task.projectId}`).emit('task:updated', {

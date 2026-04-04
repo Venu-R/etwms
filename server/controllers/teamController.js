@@ -13,7 +13,10 @@ exports.createTeam = async (req, res) => {
 
 exports.getAllTeams = async (req, res) => {
 	try {
-		const teams = await Team.find().populate('managerId', 'name email').lean();
+		const teams = await Team.find()
+			.populate('managerId', 'name email')
+			.populate('memberIds', 'name email role')
+			.lean();
 		res.json({ success: true, data: { teams } });
 	} catch (err) {
 		res.status(500).json({ success: false, message: err.message });

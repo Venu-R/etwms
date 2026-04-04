@@ -32,3 +32,18 @@ exports.updateUser = async (req, res) => {
 		res.status(500).json({ success: false, message: err.message });
 	}
 };
+
+exports.deleteUser = async (req, res) => {
+	try {
+		if (String(req.user.userId) === String(req.params.id)) {
+			return res.status(400).json({ success: false, message: 'Admin cannot delete own account' });
+		}
+
+		const user = await User.findByIdAndDelete(req.params.id).select('-password');
+		if (!user) return res.status(404).json({ success: false, message: 'User not found' });
+
+		res.json({ success: true, data: { user } });
+	} catch (err) {
+		res.status(500).json({ success: false, message: err.message });
+	}
+};

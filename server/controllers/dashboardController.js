@@ -21,7 +21,9 @@ exports.adminDashboard = async (req, res) => {
 
 exports.managerDashboard = async (req, res) => {
 	try {
-		const projects = await Project.find({ managerId: req.user.userId }).lean();
+		const projects = await Project.find({ managerId: req.user.userId })
+			.populate('teamId', 'name')
+			.lean();
 		const projectIds = projects.map((p) => p._id);
 		const tasks = await Task.find({ projectId: { $in: projectIds } }).lean();
 		res.json({ success: true, data: { projects, tasks } });

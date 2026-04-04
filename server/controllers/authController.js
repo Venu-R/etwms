@@ -7,19 +7,27 @@ const generateToken = (userId, role) =>
 
 exports.login = async (req, res) => {
 	try {
-		const { email, password } = req.body;
+		const { email, password, role } = req.body;
 		if (!email || !password) {
 			return res.status(400).json({ success: false, message: 'Email and password required' });
 		}
 
-		const user = await User.findOne({ email, isActive: true });
+		const user = await User.findOne({ email });
 		if (!user) {
 			return res.status(401).json({ success: false, message: 'Invalid credentials' });
+		}
+
+		if (!user.isActive) {
+			return res.status(403).json({ success: false, message: 'Your ID has been deactivated' });
 		}
 
 		const match = await bcrypt.compare(password, user.password);
 		if (!match) {
 			return res.status(401).json({ success: false, message: 'Invalid credentials' });
+		}
+
+		if (role && String(role).toLowerCase() !== user.role) {
+			return res.status(401).json({ success: false, message: 'Invalid credentials or wrong role selected' });
 		}
 
 		const token = generateToken(user._id.toString(), user.role);
@@ -48,6 +56,12 @@ exports.register = async (req, res) => {
 			return res.status(400).json({ success: false, message: 'name, email, password, role required' });
 		}
 
+		const allowedRoles = ['admin', 'manager', 'employee'];
+		const normalizedRole = String(role).toLowerCase();
+		if (!allowedRoles.includes(normalizedRole)) {
+			return res.status(400).json({ success: false, message: 'Invalid role' });
+		}
+
 		const exists = await User.findOne({ email });
 		if (exists) {
 			return res.status(409).json({ success: false, message: 'Email already in use' });
@@ -58,7 +72,7 @@ exports.register = async (req, res) => {
 			name,
 			email,
 			password: hashed,
-			role,
+			role: normalizedRole,
 			teamId: teamId || null,
 		});
 
