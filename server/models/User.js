@@ -9,6 +9,4 @@ const userSchema = new mongoose.Schema({
   isActive: { type: Boolean, default: true },
 }, { timestamps: true });
 
-userSchema.index({ email: 1 });
-
 module.exports = mongoose.model('User', userSchema);

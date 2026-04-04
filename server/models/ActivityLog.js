@@ -6,9 +6,10 @@ const activityLogSchema = new mongoose.Schema({
   entityType: { type: String, enum: ['task', 'project', 'user', 'team'], required: true },
   entityId: { type: mongoose.Schema.Types.ObjectId, required: true },
   metadata: { type: Object, default: {} },
-  timestamp: { type: Date, default: Date.now, index: true },
+  timestamp: { type: Date, default: Date.now },
 });
 
+activityLogSchema.index({ timestamp: 1 });
 activityLogSchema.index({ userId: 1, timestamp: -1 });
 
 module.exports = mongoose.model('ActivityLog', activityLogSchema);
