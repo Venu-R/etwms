@@ -5,6 +5,7 @@ import toast from 'react-hot-toast';
 import useAppStore from '../store/useAppStore';
 
 const SocketContext = createContext(null);
+const socketUrl = import.meta.env.VITE_SOCKET_URL || 'http://localhost:5000';
 
 export const SocketProvider = ({ children }) => {
   const { token, isAuthenticated } = useAuth();
@@ -16,7 +17,7 @@ export const SocketProvider = ({ children }) => {
   useEffect(() => {
     if (!isAuthenticated || !token) return undefined;
 
-    socketRef.current = io('http://localhost:5000', {
+    socketRef.current = io(socketUrl, {
       query: { token },
       transports: ['websocket'],
     });
