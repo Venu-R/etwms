@@ -112,12 +112,12 @@ Server does not start:
 - Check MONGODB_URI and JWT_SECRET in server .env
 
 CORS errors:
-- Verify CLIENT_URL in server .env matches frontend URL
+- Verify CLIENT_URL in server .env matches frontend URL.
 
 Login works but wrong page behavior:
-- Make sure selected role matches account role on sign-in
+- Make sure selected role matches account role on sign-in.
 
 ## Notes
 
 - API endpoints and payloads are documented in API_CONTRACT.md
-- Main branch is the active, cleaned branch for this repo
+- Main branch is the active, cleaned branch for this repo.
