@@ -1,123 +1,150 @@
-# ETWMS
+# ETWMS — Enterprise Task & Workflow Management System
 
-Enterprise Task and Workflow Management System.
+A full-stack web platform for organizations to manage teams, assign tasks, and track project progress. Built with the MERN stack, it supports three user roles — Admin, Manager, and Employee — each with distinct permissions and views, with real-time task notifications via Socket.IO.
 
-This is a full-stack app for admin, manager, and employee workflows.
+🔗 **Live Demo:** [etwms.vercel.app](https://etwms.vercel.app)
 
-## What this project does
+---
 
-- Authentication with role-based access (admin, manager, employee)
-- Team management
-- Project and task management
-- Employee task tracking and status updates
-- Dashboard metrics and activity logs
-- Real-time events with Socket.IO
-- Light and dark theme support on the frontend
+## Project Structure
 
-## Tech stack
+```
+etwms/
+├── client/                        # React frontend
+│   ├── src/
+│   │   ├── components/
+│   │   ├── pages/
+│   │   ├── store/                 # Zustand state management
+│   │   └── main.jsx
+│   ├── package.json
+│   └── vite.config.js
+├── server/                        # Express backend
+│   ├── models/                    # Mongoose schemas
+│   ├── routes/                    # API route handlers
+│   ├── middleware/                 # Auth, RBAC, rate limiting
+│   ├── app.js
+│   └── package.json
+├── API_CONTRACT.md                # Full API reference
+├── package.json                   # Root — runs both client and server
+├── .gitignore
+└── README.md
+```
 
-Frontend:
-- React + Vite
-- Tailwind CSS
-- Axios
-- Zustand
-- Socket.IO client
-- Recharts
+---
 
-Backend:
-- Node.js + Express
-- MongoDB + Mongoose
-- JWT auth
-- Socket.IO
-- Helmet, rate limiting, morgan
+## Overview
 
-## Project structure
+ETWMS is a full-stack task and workflow management system built for organizations to manage teams, assign tasks, and track project progress across all levels.
 
-- client: React frontend
-- server: Express backend
-- API_CONTRACT.md: API reference
+The platform implements **Role-Based Access Control (RBAC)** with JWT authentication, supporting three distinct user roles:
 
-## Prerequisites
+| Role | Permissions |
+|---|---|
+| **Admin** | Manages the entire organization — creates teams, manages users, oversees all projects |
+| **Manager** | Creates projects, assigns tasks to employees, tracks team progress |
+| **Employee** | Views assigned tasks, updates task status, tracks personal progress |
 
-- Node.js 18+
-- npm
-- MongoDB connection string
+Real-time task notifications and live dashboard updates are powered by **Socket.IO**, keeping all users in sync across the organization instantly.
 
-## Environment variables (server)
+---
 
-Create a .env file inside server folder with:
+## Tech Stack
 
+| Layer | Tools / Technologies |
+|---|---|
+| Frontend | React, Vite, Tailwind CSS, Axios, Zustand, Recharts |
+| Backend | Node.js, Express, MongoDB, Mongoose |
+| Auth | JWT, bcrypt |
+| Real-time | Socket.IO |
+| Security | Helmet, rate limiting, morgan |
+
+---
+
+## How to Run
+
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/Venu-R/etwms.git
+cd etwms
+```
+
+### 2. Set Up Environment Variables
+
+Create a `.env` file inside the `server/` folder:
+
+```
 PORT=5000
 MONGODB_URI=your_mongodb_connection_string
 JWT_SECRET=your_secure_jwt_secret
 JWT_EXPIRES_IN=7d
 CLIENT_URL=http://localhost:5173
+```
 
-Notes:
-- CLIENT_URL should match your frontend URL.
-- MONGODB_URI must be valid before starting the backend.
+### 3. Install Dependencies
 
-## Install dependencies
+From the project root:
 
-From project root (etwms):
-
+```bash
 npm install
 cd client && npm install
 cd ../server && npm install
+```
 
-## Run in development
+### 4. Run in Development
 
-From project root (etwms):
+From the project root:
 
+```bash
 npm run dev
+```
 
 This starts both:
-- backend on port 5000
-- frontend on Vite default port (usually 5173)
+- **Backend** on `http://localhost:5000`
+- **Frontend** on `http://localhost:5173`
 
-## Build frontend
+---
 
-From client folder:
+## Build for Production
 
+```bash
+cd client
 npm run build
 npm run preview
+```
 
-## Run backend only
+To run backend only:
 
-From server folder:
-
+```bash
+cd server
 npm run dev
-
-or
-
+# or
 npm start
+```
 
-## API base URL used by frontend
+---
 
-Current frontend API target:
-- http://localhost:5000/api
+## Features
 
-If deploying, switch this to an environment-based value.
+- JWT-based authentication with role-based access control (RBAC)
+- Three role levels — Admin, Manager, Employee — each with distinct views and permissions
+- Team creation and organization management
+- Project and task assignment with status tracking
+- Real-time task notifications and live dashboard updates via Socket.IO
+- Dashboard metrics, activity logs, and progress tracking
+- Light and dark theme support
 
-## Deployment summary
+---
 
-1. Deploy backend first (set env vars and MongoDB URI).
-2. Deploy frontend next.
-3. Point frontend API base URL to deployed backend.
-4. Update backend CLIENT_URL to deployed frontend URL.
+## API Reference
 
-## Common issues
+All API endpoints and request/response payloads are documented in [`API_CONTRACT.md`](./API_CONTRACT.md).
 
-Server does not start:
-- Check MONGODB_URI and JWT_SECRET in server .env
+---
 
-CORS errors:
-- Verify CLIENT_URL in server .env matches frontend URL.
+## Author
 
-Login works but wrong page behavior:
-- Make sure selected role matches account role on sign-in.
+**Venu R**
+rvenu730@gmail.com
 
-## Notes
-
-- API endpoints and payloads are documented in API_CONTRACT.md
-- Main branch is the active, cleaned branch for this repo.
+---
